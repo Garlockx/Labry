@@ -5,6 +5,11 @@ TagManager:
   serializedVersion: 2
   tags:
   - Path
+  - Collider
+  - PlayerCollider
+  - Rules
+  - TutoText
+  - Canvas
   layers:
   - Default
   - TransparentFX

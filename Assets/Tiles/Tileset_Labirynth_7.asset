@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: Tileset_Labirynth_7
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: -4533375275722605340, guid: e400ec7bd69bccd42b16fbfdc076224d, type: 3}
+  m_Sprite: {fileID: -4533375275722605340, guid: 84832bb1c9039944b9c13579f2ed836b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1
