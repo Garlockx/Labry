@@ -34,13 +34,23 @@ public class PlayerMovement : MonoBehaviour
             playerSpriteManager.circleSprite();
             playerManager.playerCanDie();
             moveToCoroutine = StartCoroutine(MoveTo(transform.position + direction));
-        }
-        if(Input.GetButtonDown("Fire2"))
+        } else if(Input.GetButtonDown("Fire2"))
         {
+            playerManager.playerCannotDie();
             Vector3 direction = calculateMoveDirection();
             playerSpriteManager.triangleSprite(direction);
             moveToCoroutine = StartCoroutine(MoveTo(transform.position + direction * 2));
         }
+    }
+
+    public void moveToOtherPosition(Vector3 newPosition)
+    {
+        StopCoroutine(moveToCoroutine);
+        playerSpriteManager.resetSprite();
+        isMoving = false;
+        playerManager.playerCanDie();
+        transform.position = newPosition;
+        transform.rotation = new Quaternion();
     }
 
     /*
@@ -80,6 +90,7 @@ public class PlayerMovement : MonoBehaviour
         return angle;
     }
 
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "Collider")
@@ -92,7 +103,7 @@ public class PlayerMovement : MonoBehaviour
     /* 
      *  Take the player to his old position if he hit a wall
      */
-    public IEnumerator BackToOldPosition()
+    IEnumerator BackToOldPosition()
     {
         isMoving = true;
         while ((transform.position - playerPositionBeforeMoving).sqrMagnitude != 0)
@@ -101,7 +112,7 @@ public class PlayerMovement : MonoBehaviour
             yield return null;
         }
         isMoving = false;
-        playerManager.playerCannotDie();
+        playerManager.playerCanDie();
         playerSpriteManager.resetSprite();
     }
 
@@ -118,7 +129,7 @@ public class PlayerMovement : MonoBehaviour
             yield return null;
         }
         isMoving = false;
-        playerManager.playerCannotDie();
+        playerManager.playerCanDie();
         onPlayerMove?.Invoke();
         playerSpriteManager.resetSprite();
     }

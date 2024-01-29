@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,9 +18,22 @@ public class CameraManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(selectionManager.getMenuActivity())
+        {
+            return;
+        }
         moveCameraToTile();
     }
 
+    public void setCameraOriginPos(Vector3 newCameraPos)
+    {
+        cameraOriginPos = newCameraPos;
+    }
+
+    public void setCameraNewPos(Vector3 newCameraPos)
+    {
+        Camera.main.transform.position = newCameraPos;
+    }
 
     /*
      * Move camera to tile mouseover

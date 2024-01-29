@@ -5,7 +5,7 @@ using System.Collections;
 public class SceneLoaderManager : MonoBehaviour
 {
     public Animator transition;
-    public float transitionTime = 1.0f;
+    public float transitionTime;
 
     public void loadScene(string sceneName)
     {

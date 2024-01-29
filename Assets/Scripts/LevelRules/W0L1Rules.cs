@@ -1,7 +1,5 @@
 using UnityEngine;
 using TMPro;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class W0L1Rules : MonoBehaviour
 {
@@ -54,7 +52,7 @@ public class W0L1Rules : MonoBehaviour
                 return;
             }
         }
-        tutoText.GetComponent<TextMeshPro>().text = "Si vous repassé encore une fois sur une même case, elle devient orange puis rouge. Essayez de passer sur une case rouge";
+        tutoText.GetComponent<TextMeshPro>().text = "When you move onto a green tile, it turns orange and then red. \n Try to move onto a red tile.";
         baseRules.deathRule = true;
         checkFirstTuto = true;
     }
@@ -66,23 +64,6 @@ public class W0L1Rules : MonoBehaviour
         {
             return;
         }
-        updateDeathCanvas(deathCanvas);
         playerIsDead = true;
-    }
-
-    private void updateDeathCanvas(GameObject deathCanvas)
-    {
-        tutoText.GetComponent<TextMeshPro>().text = "";
-        DeathCanvasManager restartButton = deathCanvas.GetComponentInChildren<DeathCanvasManager>();
-        restartButton.gameObject.transform.localPosition = new Vector3(200.0f, -26.0f, 0.0f);
-        GameObject finalText = (GameObject)Instantiate(Resources.Load("Prefabs/TextTemplate"), deathCanvas.transform);
-        GameObject buttonReturnToWorld = (GameObject)Instantiate(Resources.Load("Prefabs/ButtonTemplate"), deathCanvas.transform);
-        buttonReturnToWorld.transform.localPosition = new Vector3(-200.0f, -26.0f, 0.0f);
-        buttonReturnToWorld.GetComponent<Button>().onClick.AddListener(() =>
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name.Substring(0, 2), LoadSceneMode.Single);
-        });
-        buttonReturnToWorld.GetComponentInChildren<Text>().text = "Level Selection";
-        finalText.GetComponent<TextMeshProUGUI>().text = "Vous avez été déchiré mais vous avez réussi cette partie du tutorial";
     }
 }

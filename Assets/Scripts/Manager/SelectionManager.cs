@@ -51,9 +51,21 @@ public class SelectionManager : MonoBehaviour
         }
     }
 
+    public bool getMenuActivity()
+    {
+        Menu menu = FindObjectOfType<Menu>();
+        if (menu != null)
+        {
+            return menu.getMenuActivity();
+        } else
+        {
+            return false;
+        }
+    }
+
     private void Update()
     {
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonDown(0) && !getMenuActivity())
         {
             selectWorld();
             return;
@@ -107,7 +119,7 @@ public class SelectionManager : MonoBehaviour
     {
         Vector3 tileWorldPosition = tilemap.GetCellCenterWorld(tilePosition);
         float distance = Vector3.Distance(mouseWorldPos, tileWorldPosition);
-        if (distance > maxDistance)
+        if (distance > maxDistance || getMenuActivity())
         {
             tilemap.SetTransformMatrix(tilePosition, Matrix4x4.Inverse(Matrix4x4.Scale(new Vector3(growScale + maxDistance, growScale + maxDistance, growScale + maxDistance))));
             return;

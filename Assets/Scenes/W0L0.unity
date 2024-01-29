@@ -328,23 +328,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1278745539 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 330650760889467831, guid: 64047b8f09042fb49a2da45281b47342, type: 3}
-  m_PrefabInstance: {fileID: 1289306724}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1278745540
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1278745539}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ab575ec304252c46916172de10d2d8c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1289306724
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3709,8 +3692,12 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "La fl\xE8che suit le curseur de votre souris. Clique droit de la souris
-    pour se d\xE9placer. D\xE9placez-vous de 2 cases sur la droite"
+  m_text: 'Arrow move towards mouse cursor.
+
+    Right clic to move.
+
+    Move 2
+    tiles to right.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8d45d3dd06d38ca4bb926eb1a3bb18d6, type: 2}
   m_sharedMaterial: {fileID: -1175575707514651364, guid: 8d45d3dd06d38ca4bb926eb1a3bb18d6, type: 2}

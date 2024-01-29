@@ -61,7 +61,7 @@ public class TrapOne : MonoBehaviour
         gameObject.GetComponent<BoxCollider2D>().size = colliderSize;
 
         Vector2 colliderOffset = gameObject.GetComponent<BoxCollider2D>().offset;
-        colliderOffset.x = trapLength / 2 + 0.5f;
+        colliderOffset.x = trapLength / 2 + 1.0f;
         gameObject.GetComponent<BoxCollider2D>().offset = colliderOffset;
     }
 
@@ -76,7 +76,7 @@ public class TrapOne : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "PlayerCollider" && collision.gameObject.transform.parent.gameObject.GetComponent<PlayerManager>().getPlayerDieState())
+        if (collision.gameObject.tag == "PlayerCollider")
         {
             collision.gameObject.transform.parent.gameObject.GetComponent<PlayerManager>().playerDeath();
         }

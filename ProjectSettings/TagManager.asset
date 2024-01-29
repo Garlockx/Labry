@@ -4,10 +4,11 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Path
   - Collider
-  - PlayerCollider
+  - Path
   - Rules
+  - PlayerCollider
+  - Menu
   - TutoText
   - Canvas
   layers:

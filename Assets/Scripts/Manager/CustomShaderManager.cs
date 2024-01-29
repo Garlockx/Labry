@@ -2,61 +2,61 @@ using UnityEngine;
 
 public class CustomShaderManager : MonoBehaviour
 {
-    [SerializeField]
     private SpriteRenderer spriteRenderer;
-    private Color PlayerColor;
+    private Color Color;
 
-    private void Start()
+    public void setDefaultShader(GameObject gameObject, SpriteRenderer _spriteRenderer)
     {
-        PlayerColor = spriteRenderer.color;
-    }
-
-    public void setDefaultShader(GameObject _gameObject)
-    {
+        spriteRenderer = _spriteRenderer;
+        Color = _spriteRenderer.color;
         Material defaultMat = new Material(Shader.Find("Sprites/Default"));
-        _gameObject.GetComponent<SpriteRenderer>().material = defaultMat;
+        gameObject.GetComponent<SpriteRenderer>().material = defaultMat;
     }
 
-    public void setCircleMat(GameObject _gameObject)
+    public void setCircleMat(GameObject gameObject, SpriteRenderer _spriteRenderer)
     {
+        spriteRenderer = _spriteRenderer;
+        Color = _spriteRenderer.color;
         Material circleMaterial = (Material)Resources.Load("Material/CircleMat", typeof(Material));
-        _gameObject.GetComponent<SpriteRenderer>().material = circleMaterial;
+        gameObject.GetComponent<SpriteRenderer>().material = circleMaterial;
         setTillingOffSet();
         setColor();
     }
 
-    public void setTriangleMat(GameObject _gameObject, Vector3 _playerDirection)
+    public void setTriangleMat(GameObject gameObject, SpriteRenderer _spriteRenderer, Vector3 direction)
     {
+        spriteRenderer = _spriteRenderer;
+        Color = _spriteRenderer.color;
         Material circleMaterial = (Material)Resources.Load("Material/TriangleMat", typeof(Material));
-        _gameObject.GetComponent<SpriteRenderer>().material = circleMaterial;
+        gameObject.GetComponent<SpriteRenderer>().material = circleMaterial;
         setTillingOffSet();
-        setTriangleOrientation(_playerDirection);
+        setTriangleOrientation(direction);
         setColor();
     }
 
     private void setColor()
     {
-        spriteRenderer.material.SetColor("_Color", PlayerColor);
+        spriteRenderer.material.SetColor("_Color", Color);
     }
 
-    private void setTriangleOrientation(Vector3 _playerDirection)
+    private void setTriangleOrientation(Vector3 direction)
     {
         Vector4 triangleVertexA;
         Vector4 triangleVertexB;
         Vector4 triangleVertexC;
 
-        if (_playerDirection == new Vector3(-1,0,0))
+        if (direction == new Vector3(-1,0,0))
         {
             triangleVertexA = new Vector4(1.0f, 0.0f, 0.0f, 0.0f);
             triangleVertexB = new Vector4(1.0f, 1.0f, 0.0f, 0.0f);
             triangleVertexC = new Vector4(0.0f, 0.5f, 0.0f, 0.0f);
-        } else if (_playerDirection == new Vector3(1, 0, 0))
+        } else if (direction == new Vector3(1, 0, 0))
         {
             triangleVertexA = new Vector4(0.0f, 0.0f, 0.0f, 0.0f);
             triangleVertexB = new Vector4(0.0f, 1.0f, 0.0f, 0.0f);
             triangleVertexC = new Vector4(1.0f, 0.5f, 0.0f, 0.0f);
 
-        } else if (_playerDirection == new Vector3(0, 1, 0))
+        } else if (direction == new Vector3(0, 1, 0))
         {
             triangleVertexA = new Vector4(0.5f, 1.0f, 0.0f, 0.0f);
             triangleVertexB = new Vector4(0.0f, 0.0f, 0.0f, 0.0f);

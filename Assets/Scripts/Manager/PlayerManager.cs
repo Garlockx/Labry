@@ -5,7 +5,7 @@ public class PlayerManager : MonoBehaviour
 {
     public Action onPlayerDeath;
     private bool isPlayerCanMove = true;
-    private bool playerDieState = false;
+    private bool playerDieState = true;
 
     public void playerCannotMove()
     {
@@ -27,15 +27,14 @@ public class PlayerManager : MonoBehaviour
         playerDieState = false;
     }
 
-    public bool getPlayerDieState()
-    {
-        return playerDieState;
-    }
-
     public void playerDeath()
     {
         BaseRules baseRules = GameObject.FindGameObjectWithTag("Rules").GetComponent<BaseRules>();
         if (!baseRules.deathRule)
+        {
+            return;
+        }
+        if (!playerDieState)
         {
             return;
         }

@@ -7,12 +7,18 @@ public class DeathCanvasManager : MonoBehaviour
     {
         if(Input.GetKeyDown("space"))
         {
-            restartButtonOnClick();
+            replayButtonOnClick();
         }
     }
 
-    public void restartButtonOnClick()
+    public void replayButtonOnClick()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void backButtonOnClick()
+    {
+        string sceneName = SceneManager.GetActiveScene().name;
+        SceneManager.LoadScene(sceneName.Substring(0, sceneName.IndexOf("L")), LoadSceneMode.Single);
     }
 }

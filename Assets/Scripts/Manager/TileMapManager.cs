@@ -12,15 +12,24 @@ public class TileMapManager : MonoBehaviour
     private BoundsInt.PositionEnumerator allTilesPos;
     private BaseRules baseRules;
 
-    private Color tileUnderColorPlayer;
+    private bool isLevelComplete;
+    
 
-    /*
-     POSSIBLE CELLS COLORS     
-     */
-    private Color Green = new Color(0.47f, 0.84f, 0.06f);
-    private Color Orange = new Color(0.96f, 0.64f, 0.10f);
-    private Color Red = new Color(0.83f, 0.15f, 0.15f);
+    public struct NearTile
+    {
+        public Vector3 position;
+        public float distanceWithPlayer;
+        public Color color;
 
+        public NearTile(Vector3 position, Color color)
+        {
+            TileMapManager tileMapManager = FindObjectOfType<TileMapManager>();
+
+            this.position = position;
+            this.color = color;
+            distanceWithPlayer = tileMapManager.getDistanceWithPlayer(position);
+        }
+    }
 
     void Start()
     {
@@ -32,15 +41,9 @@ public class TileMapManager : MonoBehaviour
         player.GetComponentInChildren<PlayerMovement>().onPlayerMove += checkColor;
     }
 
-    public Dictionary<string, Color> getGameColors()
+    public bool getIsLevelComplete()
     {
-        Dictionary<string, Color> gameColor = new Dictionary<string, Color>() { 
-            {"Green", Green },
-            {"Orange", Green },
-            {"Red", Red }
-        };
-
-        return gameColor;
+        return isLevelComplete;
     }
 
     public List<Color> getAllTilesColor()
@@ -57,17 +60,92 @@ public class TileMapManager : MonoBehaviour
 
         return tilesColors;
     }
+
+    public Color getTileColor(Vector3 position)
+    {
+        Vector3Int cellPosition = tilemap.WorldToCell(position);
+        return tilemap.GetColor(cellPosition);
+    }
+
+    public float getDistanceWithPlayer(Vector3 position)
+    {
+        Vector3Int cellPosition = tilemap.WorldToCell(position);
+        Vector3Int playerCellPosition = tilemap.WorldToCell(player.transform.GetChild(0).transform.position);
+        float distanceWithPlayer = Vector3Int.Distance(playerCellPosition, cellPosition);
+        return distanceWithPlayer;
+    }
+
+    public float getDistanceWithPlayer(Vector3Int position)
+    {
+        Vector3Int playerCellPosition = tilemap.WorldToCell(player.transform.GetChild(0).transform.position);
+        float distanceWithPlayer = Vector3Int.Distance(playerCellPosition, position);
+        return distanceWithPlayer;
+    }
+
+    /**
+     * Return a list of accessible tiles nearest a point 
+     */
+    public List<NearTile> getNearestTilesPositions(Vector3 position)
+    {
+        List<NearTile> nearestTilesPositions = new List<NearTile>();
+
+        Vector3 topPostion = position;
+        topPostion.y += 1;
+        Vector3 bottomPostion = position;
+        bottomPostion.y -= 1;
+        Vector3 leftPostion = position;
+        leftPostion.x -= 1;
+        Vector3 rightPostion = position;
+        rightPostion.x += 1;
+
+        if (tilemap.GetTile(tilemap.WorldToCell(topPostion)) != null)
+        {
+            nearestTilesPositions.Add(new NearTile(topPostion, tilemap.GetColor(tilemap.WorldToCell(topPostion))));
+        }
+        if (tilemap.GetTile(tilemap.WorldToCell(bottomPostion)) != null)
+        {
+            nearestTilesPositions.Add(new NearTile(bottomPostion, tilemap.GetColor(tilemap.WorldToCell(bottomPostion))));
+        }
+        if (tilemap.GetTile(tilemap.WorldToCell(leftPostion)) != null)
+        {
+            nearestTilesPositions.Add(new NearTile(leftPostion, tilemap.GetColor(tilemap.WorldToCell(leftPostion))));
+        }
+        if (tilemap.GetTile(tilemap.WorldToCell(rightPostion)) != null)
+        {
+            nearestTilesPositions.Add(new NearTile(rightPostion, tilemap.GetColor(tilemap.WorldToCell(rightPostion))));
+        }
+        return nearestTilesPositions;
+    }
+
+    public void setTileColor(Vector3 position, Color color)
+    {
+        Vector3Int cellPosition = tilemap.WorldToCell(position);
+        tilemap.SetColor(cellPosition, color);
+    }
+
+    public void setAllTilesColor(Color color)
+    {
+        foreach (Vector3Int tilePos in allTilesPos)
+        {
+            if (tilemap.HasTile(tilePos))
+            {
+                tilemap.SetColor(tilePos, color);
+            }
+        }
+    }
     
     public void invokeWinning()
     {
-        player.GetComponent<PlayerManager>().playerCannotDie();
+        FindObjectOfType<BaseRules>().deathRule = false;
         player.GetComponent<PlayerManager>().playerCannotMove();
         onWinning?.Invoke();
     }
 
     private void isWinning()
     {
-        if(!baseRules.winningRule)
+        bool levelComplete = true;
+        GameColorsManager gameColorManager = FindObjectOfType<GameColorsManager>();
+        if (!baseRules.winningRule)
         {
             return;
         }
@@ -79,8 +157,13 @@ public class TileMapManager : MonoBehaviour
                 {
                     return;
                 }
+                if (tilemap.GetColor(tilePos) != gameColorManager.getColor("FirstColor"))
+                {
+                    levelComplete = false;
+                }
             }
         }
+        isLevelComplete = levelComplete;
         invokeWinning();
     }
 
@@ -98,20 +181,21 @@ public class TileMapManager : MonoBehaviour
     {
         tilemap.SetTileFlags(cellPosition, TileFlags.None);
         Color tileColor = tilemap.GetColor(cellPosition);
+        GameColorsManager gameColorManager = FindObjectOfType<GameColorsManager>();
         if (tileColor == Color.white)
         {
-            tilemap.SetColor(cellPosition, Green);
+            tilemap.SetColor(cellPosition, gameColorManager.getColor("FirstColor"));
             isWinning();
             return;
         }
-        if (tileColor == Green)
+        if (tileColor == gameColorManager.getColor("FirstColor"))
         {
-            tilemap.SetColor(cellPosition, Orange);
+            tilemap.SetColor(cellPosition, gameColorManager.getColor("SecondColor"));
             return;
         }
-        if (tileColor == Orange)
+        if (tileColor == gameColorManager.getColor("SecondColor"))
         {
-            tilemap.SetColor(cellPosition, Red);
+            tilemap.SetColor(cellPosition, gameColorManager.getColor("ThirdColor"));
             return;
         }
         playerIsDead();
